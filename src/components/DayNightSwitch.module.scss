@@ -1,0 +1,187 @@
+
+/* source: https://daily-dev-tips.com/posts/creating-day-night-css-only-toggle-switch/ */
+/* sunny side */
+$blue-background: #C2E9F6;
+$blue-border: #72cce3;
+$blue-color: #96dcee;
+$yellow-background: #fffaa8;
+$yellow-border: #f5eb71;
+/* dark side */
+$indigo-background: #808fc7;
+$indigo-border: #5d6baa;
+$indigo-color: #6b7abb;
+$gray-border: #e8e8ea;
+$gray-dots: #e8e8ea;
+
+@mixin ui_animation($name, $duration, $fill-mode: backwards) {
+	animation-name: $name;
+	animation-duration: $duration;
+	animation-fill-mode: $fill-mode;
+
+	@media (prefers-reduced-motion) {
+		animation-duration: unset;
+	}
+}
+
+@mixin ui_transition($duration, $delay: false, $function: false, $property: false) {
+	@if $duration {
+		transition-duration: $duration;
+	}
+	@if $delay {
+		transition-delay: $delay;
+	}
+	@if $function {
+		transition-timing-function: $function;
+	}
+	@if ($property) {
+		transition-property: $property;
+	}
+
+	@media (prefers-reduced-motion) {
+		transition: unset;
+	}
+}
+
+
+.toggle_checkbox {
+	display: none;
+
+	&:checked + .toggle_label {
+		background: $indigo-color;
+		border-color: $indigo-border;
+
+		/* sun/moon element: moon */
+		&::before {
+			@include ui_animation(switch, 350ms, forwards);
+			background: #fff;
+			border-color: $gray-border;
+		}
+		/* the dimples on the moon appearing */
+		&::after {
+			@include ui_transition(150ms, 350ms);
+			opacity: 1;
+		}
+
+		/* the moon stars */
+		.toggle_label_background {
+			left: 17px;
+			width: 2px;
+
+			&::before, &::after {
+				width: 2px;
+				height: 2px;
+			}
+			&::before {
+				top: -5px;
+			}
+			&::after {
+				top: 2px;
+				left: -9px;
+			}
+		}
+	}
+}
+
+.toggle_label {
+	@include ui_transition(350ms, 0, ease-in, all);
+	/* placeholder element, starting at blue */
+	display: flex;
+	position: relative;
+	width: 52px;
+	height: 26px;
+	background: $blue-color;
+	border-radius: 26px; /* = height */
+	border: 2px solid $blue-border;
+
+	&:hover {
+		cursor: pointer;
+	}
+	&::before, &::after {
+		content: '';
+		position: absolute;
+	}
+	/* sun/moon element: sun */
+	&::before {
+		@include ui_transition(350ms, 0, ease-in, all);
+		@include ui_animation(reverse, 350ms, forwards);
+		width: 22px;
+		height: 22px;
+		border: 2px solid $yellow-border;
+		top: 0;
+		left: -50px;
+		border-radius: 82px;
+		background: $yellow-background;
+	}
+	/* the dimples on the moon disappearing */
+	&::after {
+		@include ui_transition(150ms, 0, ease-in, all);
+		/* colour | offset-x | offset-y | blur-radius | spread-radius */
+		box-shadow: $gray-dots -5px 0 0 1px, $gray-dots -7px 4px 0 .5px;
+		top: 5px;
+		left: 38px;
+		width: 2px;
+		height: 2px;
+		background: transparent;
+		border-radius: 50%;
+		opacity: 0;
+	}
+}
+
+.toggle_label_background {
+	@include ui_transition(150ms, 0, ease-in, all);
+	/* the sun cloud and moon stars */
+	position: relative;
+	width: 3px;
+	height: 2px;
+	border-radius: 5px;
+	background: #fff;
+	left: 33px;
+	top: 50%;
+
+	&::before, &::after {
+		@include ui_transition(150ms, 0, ease-in, all);
+		content: '';
+		position: absolute;
+		width: 10px;
+		height: 2px;
+		border-radius: 5px;
+		background: #fff;
+	}
+	&::before {
+		top: -2px;
+		left: -5px;
+	}
+	&::after {
+		top: 1px;
+		left: -2px;
+	}
+}
+
+
+@keyframes switch {
+	0% {
+		left: 0;
+	}
+	50% {
+		left: 0;
+		width: 32px;
+	}
+	100% {
+		left: 26px;
+		width: 22px;
+	}
+}
+
+@keyframes reverse {
+	0% {
+		left: 26px;
+		width: 22px;
+	}
+	50% {
+		left: 18px;
+		width: 32px;
+	}
+	100% {
+		left: 0;
+	}
+}

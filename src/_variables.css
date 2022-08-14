@@ -1,0 +1,86 @@
+
+:root {
+	/* общие для обеих тем */
+	--theme-color: #1890FF;
+	--success-color: #52C41A;
+	--error-color: #F5222D;
+	--warning-color: #FAAD14;
+
+	--block-border-radius: 5px;
+	--ui-transition: .25s ease-in-out;
+}
+
+:root[data-theme="light"] {
+	--page-background: hsl(217, 25%, 94%);
+
+	--normal-color: hsl(0, 0%, 85%);
+
+	--text-color: hsla(0, 0%, 0%, 0.75);
+	--text-color-alt: hsla(0, 0%, 0%, 0.5);
+	--text-faded-color: hsl(0, 0%, 70%);
+	--link-color: hsl(209, 100%, 55%);
+	--link-color-hover: hsl(207, 100%, 44%);
+
+	--btn-background-hover: hsla(0, 0%, 0%, 0.045);
+	--btn-text-color-disabled: hsla(0, 0%, 0%, 0.37);
+
+	--block-background: #FFFFFF;
+	--block-shadow: 0px 4px 12px hsla(0, 0%, 0%, 0.15);
+
+	--divider-color: hsl(0, 0%, 91%);
+}
+
+:root[data-theme="dark"] {
+	--page-background: hsl(217, 13%, 22%);
+
+	--normal-color: hsl(0, 0%, 30%);
+
+	--text-color: hsla(0, 0%, 100%, 0.75);
+	--text-color-alt: hsla(0, 0%, 100%, 0.5);
+	--text-faded-color: hsl(0, 0%, 70%);
+	--link-color: hsl(209, 60%, 58%);
+	--link-color-hover: hsl(207, 100%, 63%);
+
+	--btn-background-hover: hsla(0, 0%, 100%, 0.05);
+	--btn-text-color-disabled: hsla(0, 0%, 100%, 0.37);
+
+	--block-background: hsl(217, 12%, 15%);
+	--block-shadow: 0px 4px 12px hsla(0, 0%, 0%, 0.15);
+
+	--divider-color: hsl(0, 0%, 9%);
+}
+
+/* особые настройки */
+@media(prefers-reduced-motion) {
+	:root {
+		--ui-transition: unset;
+	}
+
+	* {
+		transition: unset !important;
+	}
+}
+
+
+/* $page-background: #EBEEF3;
+$theme-color: #1890FF;
+$success-color: #52C41A;
+$error-color: #F5222D;
+$warning-color: #FAAD14;
+$normal-color: #D9D9D9;
+
+$text-color: hsla(0, 0%, 0%, 0.75);
+$text-color-alt: hsla(0, 0%, 0%, 0.5);
+$text-faded-color: hsl(0, 0%, 75%);
+$link-color: #1890FF;
+
+$block-background: #FFFFFF;
+$block-shadow: 0px 4px 12px hsla(0, 0%, 0%, 0.15); */
+
+
+/* $button-border-color: #DFE5EC;
+$check-hover: #F1FCFF;
+$check-border-color: #9ABBCE; */
+
+/* $screen-mobile-wide: 360px; */
+/* $screen-tablet: 768px; */

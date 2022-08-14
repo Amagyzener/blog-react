@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Roboto:wght@400;500&display=swap');
+
+::selection {
+	background: hsla(216, 29%, 52%, 0.58) !important;
+}
+::-moz-selection {
+	background: hsla(216, 29%, 52%, 0.58) !important;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}

@@ -1,0 +1,114 @@
+
+.container {
+	margin: 34px auto 0;
+	padding: 48px 32px;
+	max-width: 385px;
+	background-color: var(--block-background);
+	box-shadow: var(--block-shadow);
+	border-radius: var(--block-border-radius);
+}
+
+form {
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
+
+	h2 {
+		margin-bottom: 20px;
+		text-align: center;
+		font-size: 1.65rem;
+		line-height: 1.2em;
+	}
+
+	.input_container {
+		display: flex;
+		flex-direction: column;
+		font-size: 1.15rem;
+		line-height: 1.6em;
+
+		.input_wrapper {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+		}
+
+		& > label:not([class]) {
+			margin-top: 12px;
+			font-weight: 500;
+		}
+
+		input[type="text"],
+		input[type="email"] {
+			margin: 2px 0;
+			padding: 8px 12px;
+			background-color: var(--block-background);
+			border: 1px solid var(--normal-color);
+			border-radius: var(--block-border-radius);
+			font-size: 1.35rem;
+		}
+
+		input[type="text"][aria-invalid="true"],
+		input[type="email"][aria-invalid="true"] {
+			border-color: var(--error-color);
+		}
+
+		input[type="checkbox"] {
+			appearance: none;
+			position: relative;
+
+			&:hover {
+				cursor: pointer;
+
+				& + label {
+					cursor: pointer;
+				}
+			}
+
+			&::before {
+				content: "";
+				display: flex;
+				width: 16px;
+				height: 16px;
+				border: 1px solid var(--normal-color);
+				border-radius: 2px;
+				background-color: #fff;
+				transition: var(--ui-transition) all;
+			}
+			&:hover::before {
+				border-color: var(--link-color-hover);
+			}
+			&:checked::before {
+				background-color: var(--theme-color);
+			}
+			&:checked::after {
+				content: "";
+				display: flex;
+				position: absolute;
+				top: calc(50% - 6px); left: 6px;
+				width: 5px;
+				height: 10px;
+				border: solid #fff;
+				border-width: 0 2px 2px 0;
+				transform: rotate(45deg);
+			}
+
+			& + label {
+				margin-left: 1em;
+			}
+		}
+
+		.input_msg {
+			color: var(--error-color);
+		}
+	}
+
+	button[type="submit"] {
+		margin: 20px 0 8px;
+		width: 100%;
+	}
+
+	.commentary {
+		text-align: center;
+		line-height: 1.5em;
+		color: var(--text-faded-color);
+	}
+}

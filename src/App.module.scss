@@ -1,0 +1,322 @@
+/* Подключаются только один раз на всё приложение (CSS-переменные глобально записываются в :root) */
+@use './_variables' as *;
+
+html {
+	font: 12px/1em 'Inter', sans-serif;
+	font-weight: 400;
+}
+
+body {
+	background-color: var(--page-background);
+	font: inherit;
+	color: var(--text-color);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+a, a:link, a:visited {
+	color: var(--link-color);
+	transition: var(--ui-transition);
+
+	&:hover {
+		text-decoration: underline;
+		color: var(--link-color-hover);
+	}
+}
+
+h1, h2, h3, h4, h5, h6, p, em {
+	color: var(--text-color);
+}
+
+:global .centered {
+	display: flex;
+	justify-content: center;
+}
+
+:global .centered-abs-vh {
+	align-items: center;
+	position: absolute;
+	top: 50vh;
+	left: 50vw;
+	z-index: 10;
+}
+
+:global .flex-container {
+	display: flex;
+
+	&-column {
+		flex-direction: column;
+	}
+}
+
+:global .shrink0 {
+	flex-shrink: 0;
+}
+
+:global .internet-error {
+	position: sticky;
+	top: 0; right: 0; left: 0;
+	z-index: 10;
+	background: #bc4131; /* linear-gradient(45deg, var(--block-background), #bc4131, var(--block-background)); */
+	text-align: center;
+
+	p {
+		margin: 0;
+		line-height: 2em;
+		font-size: 18px;
+		text-transform: uppercase;
+		color: rgb(235, 235, 235);
+	}
+}
+
+
+/* .App {
+	display: initial;
+} */
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	position: sticky;
+	top: 0; right: 0; left: 0;
+	padding: 12px 22px;
+	background: var(--block-background);
+	border-bottom: 1px solid var(--divider-color);
+	z-index: 10;
+	/* box-shadow: var(--block-shadow); */
+
+	h1 {
+		margin: 0;
+		font-size: 1.5rem;
+		line-height: 1.5em;
+	}
+
+	& > div {
+		display: flex;
+		align-items: center;
+	}
+
+	.user {
+		display: flex;
+		align-items: center;
+		margin: 0 8px 0 26px;
+
+		&:hover span {
+			color: var(--link-color-hover);
+		}
+
+		span {
+			margin-right: 12px;
+			font-size: 1.5rem;
+			line-height: 1.5em;
+			color: var(--text-color);
+			transition: var(--ui-transition) color;
+		}
+
+		img {
+			width: 46px;
+			height: 46px;
+			background-color: var(--normal-color);
+			border-radius: 50%;
+		}
+	}
+}
+
+.main {
+	margin: 0 auto;
+	padding: 26px 0 52px;
+	max-width: 800px;
+}
+
+
+	/* AntD styling */
+:global {
+	.ant-btn {
+		transition: var(--ui-transition) all;
+
+		a {
+			transition: none;
+		}
+	}
+	.ant-btn:hover a {
+		text-decoration: none;
+	}
+
+	.ant-btn-default {
+		background-color: transparent; /* var(--block-background); */
+		border-color: var(--normal-color);
+		color: var(--text-color);
+		transition: var(--ui-transition) all;
+
+		&:hover {
+			background-color: var(--block-background);
+			border-color: currentColor;
+			color: var(--link-color-hover);
+		}
+	}
+
+	.ant-btn-dangerous {
+		background-color: var(--error-color);
+		border: none;
+		border: {
+			top-left-radius: 0;
+			bottom-left-radius: 0;
+		};
+		color: #fff;
+		/* border-color: currentColor;
+		color: var(--error-color); */
+
+		&:hover {
+			background-color: var(--normal-color);
+			color: var(--text-color);
+			/* color: var(--text-color); */
+		}
+		&:focus {
+			background-color: var(--block-background);
+			color: var(--error-color);
+		}
+	}
+
+	.ant-btn ~ .ant-btn {
+		margin-left: 18px;
+	}
+	button[class="ant-btn"]:not(.ant-btn-primary):active,
+	button[class="ant-btn"]:not(.ant-btn-primary):focus,
+	button[class="ant-btn"]:not(.ant-btn-primary):hover {
+		background: var(--block-background);
+		text-decoration: none;
+	}
+
+	.ant-btn-primary {
+		background: var(--theme-color); /* linear-gradient(5deg, var(--link-color), var(--theme-color)); */
+		/* transition: var(--ui-transition) background; */
+
+		&:not(:disabled):active,
+		&:not(:disabled):focus,
+		&:not(:disabled):hover {
+			background: var(--link-color-hover); /* linear-gradient(0, var(--link-color-hover), var(--link-color-hover)); */
+		}
+
+		&:disabled,
+		&:disabled:hover {
+			background-color: var(--btn-background-hover);
+			border-color: var(--normal-color);
+			color: var(--btn-text-color-disabled);
+		}
+	}
+
+	.ant-btn-text {
+		color: var(--text-color);
+
+		&:hover {
+			background: var(--btn-background-hover);
+			color: inherit;
+		}
+	}
+
+	.ant-btn.green,
+	.ant-btn.red {
+		background-color: transparent;
+		border-color: currentColor;
+
+		&:hover {
+			color: var(--text-color);
+		}
+	}
+	.ant-btn.red {
+		color: var(--error-color);
+	}
+	.ant-btn.green {
+		color: var(--success-color);
+	}
+
+	.anticon .anticon-heart {
+		color: var(--text-color);
+	}
+
+	.ant-pagination-item {
+		a {
+			color: var(--text-color);
+		}
+
+		&-active {
+			background: var(--theme-color);
+			border-radius: 4px;
+
+			&:hover a {
+				color: #FFF;
+			}
+
+			a {
+				font-weight: normal;
+				color: #FFF;
+			}
+		}
+	}
+
+	.ant-pagination-next button,
+	.ant-pagination-prev button {
+		color: var(--text-color);
+	}
+
+	.ant-pagination-disabled .ant-pagination-item-link,
+	.ant-pagination-disabled:hover .ant-pagination-item-link {
+		color: var(--btn-text-color-disabled);
+	}
+
+	.ant-result-title, .ant-result-subtitle {
+		color: var(--text-color);
+	}
+
+	.ant-result-extra {
+		p {
+			margin-bottom: 1.5em;
+		}
+
+		& > * {
+			margin-right: 0;
+		}
+	}
+
+	.ant-divider {
+		border-color: var(--divider-color);
+	}
+	.ant-divider-horizontal {
+		margin: 20px 0 8px;
+	}
+
+	.ant-checkbox-wrapper > span:last-child {
+		font-size: 1.15rem;
+		line-height: 1.5em;
+		color: var(--text-color-alt);
+	}
+
+	.ant-alert {
+		margin-bottom: 20px;
+		background-color: var(--block-background);
+		border: unset;
+		/* border: 1px solid var(--error-color); */
+
+		&-error {
+			box-shadow: 0 0 3px var(--error-color);
+		}
+
+		&-success {
+			box-shadow: 0 0 3px var(--success-color);
+		}
+
+		.ant-alert-message,
+		.ant-alert-description {
+			color: var(--text-color);
+		}
+	}
+
+	.ant-modal-content {
+		background-color: var(--block-background);
+
+		.ant-modal-confirm-content {
+			color: var(--text-color);
+		}
+	}
+}
