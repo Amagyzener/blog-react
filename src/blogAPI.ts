@@ -164,6 +164,13 @@ export const blogAPI = createApi({
 				validateStatus: VALIDATE_STATUS
 			})
 		}),
+		get: builder.query<AuthenticationResponse, void>({
+			query: () => ({
+				url: 'user',
+				method: 'GET',
+				validateStatus: VALIDATE_STATUS
+			})
+		}),
 
 		createArticle: builder.mutation<{ article: Article } | ErrorResponse, ArticleProps>({
 			query: (content) => ({
@@ -200,6 +207,7 @@ export const {
 	useRegisterMutation,
 	useLoginMutation,
 	useUpdateMutation,
+	useGetQuery,
 	useFavoriteMutation,
 	useUnfavoriteMutation,
 	useCreateArticleMutation,

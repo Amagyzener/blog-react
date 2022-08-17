@@ -10,7 +10,7 @@
 	.input_msg
 	.commentary
 */
-import { Fragment, HTMLInputTypeAttribute } from 'react';
+import { Fragment, HTMLInputTypeAttribute, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Divider, Button } from 'antd';
 import type { RegisterOptions, SubmitHandler } from 'react-hook-form';
@@ -24,6 +24,7 @@ export interface FormCreatorProps {
 	action?: string; // button text
 	commentary?: JSX.Element;
 	extra?: FormItemProps[];
+	isFormValid?: boolean; // forcely trigger form validation
 }
 
 export interface FormItemProps {
@@ -38,18 +39,25 @@ export interface FormItemProps {
 		bind: string;
 	};
 	disabled?: boolean;
+	onChange?: () => void;
 }
 
 export type InputsType = Record<string, string>;
 
 export default function FormCreator({ styles: css, ...props }: FormCreatorProps): JSX.Element {
-	const { register, formState: { errors }, handleSubmit, getValues, watch, setValue } = useForm<InputsType>({
+	const { register, trigger, formState: { errors }, handleSubmit, getValues, watch, setValue } = useForm<InputsType>({
 		/* defaultValues: { agreement: 'checked' } */
+		/* reValidateMode: 'onSubmit', */
+		/* mode: 'all' */
 	});
+
+	useEffect(() => {
+		!props.isFormValid && trigger();
+	}, [props.isFormValid]);
 
 	function _parseInputs(array: FormItemProps[]): JSX.Element {
 		const inputs = array.map<JSX.Element>((
-			{ name, label = 'This field', options = {}, type = 'text', value = '', matches, binder, disabled = false }: FormItemProps
+			{ name, label = 'This field', options = {}, type = 'text', value = '', matches, binder, disabled = false, onChange }: FormItemProps
 		) => {
 			const isPlaceholderCompatible = ['text', 'search', 'url', 'tel', 'email', 'password', 'number'].includes(type);
 
@@ -117,6 +125,7 @@ export default function FormCreator({ styles: css, ...props }: FormCreatorProps)
 							id={name}
 							aria-invalid={errors[name] ? 'true' : 'false'}
 							type={type}
+							onChange={onChange}
 						/>
 						{label && <label htmlFor={name}>{label}</label> || null}
 					</div>
@@ -132,6 +141,7 @@ export default function FormCreator({ styles: css, ...props }: FormCreatorProps)
 							aria-invalid={errors[name] ? 'true' : 'false'}
 							placeholder={label}
 							defaultValue={value}
+							onChange={onChange}
 						/>
 					</Fragment>
 				) || (type == 'taglist') && (
@@ -143,6 +153,7 @@ export default function FormCreator({ styles: css, ...props }: FormCreatorProps)
 							placeholder='Type a tag and end up with any separator (dot, comma, etc.), and your tag will appear here'
 							disabled={disabled}
 							style={{ width: '100%' }}
+							onChange={onChange}
 						/>
 						<Button type='default' danger onClick={() => {
 							const v = getValues(name);
@@ -161,6 +172,7 @@ export default function FormCreator({ styles: css, ...props }: FormCreatorProps)
 							disabled={disabled}
 							placeholder={(isPlaceholderCompatible && label) || undefined}
 							defaultValue={value}
+							onChange={onChange}
 						/>
 					</Fragment>
 				),
@@ -204,5 +216,6 @@ FormCreator.defaultProps = {
 	action: 'Submit',
 	commentary: null,
 	extra: null,
-	onSubmit: ((data) => console.log(data)) as SubmitHandler<InputsType>
+	onSubmit: ((data) => console.log(data)) as SubmitHandler<InputsType>,
+	isFormValid: true
 };

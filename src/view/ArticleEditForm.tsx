@@ -36,6 +36,7 @@ export default function ArticleEditForm({ user }: { user: Pick<User, 'username'>
 			err.message && dispatch(forceError(err.message));
 		}
 		navigate('/');
+		window.location.reload();
 	};
 
 	const inputs_render: FormItemProps[] = [

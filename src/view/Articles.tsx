@@ -6,7 +6,7 @@ import { SerializedError } from '@reduxjs/toolkit';
 import IconHeart from '../components/IconHeart';
 import { useAppDispatch , useAppSelector } from '../_hooks';
 import { limitString, dateFormat, tagListFormat, imgFallback } from '../_utils';
-import { getPage, setPage, setArticles, getArticles, setFavorite } from '../features/articlesSlice';
+import { getPage, setPage, setArticles, getArticles, setFavorite, needsUpdate } from '../features/articlesSlice';
 import { forceError } from '../features/statesSlice';
 import { getCurrentUser } from '../features/authSlice';
 import { useGetArticlesQuery, useFavoriteMutation, useUnfavoriteMutation } from '../blogAPI';
@@ -20,10 +20,11 @@ export default function Articles(): JSX.Element | null {
 	const [[favorite], [unfavorite]] = [useFavoriteMutation(), useUnfavoriteMutation()];
 	const { data } = useGetArticlesQuery({ page, pageSize: 10 }, /* { pollingInterval: 60000 } */); // (1) fetch articles
 	const { /* articles, */ articlesCount: dataTotal } = data ?? {};
-	const articles = useAppSelector(getArticles); // (3) get articles from the state
+	const [articles, updateNeeded] = [useAppSelector(getArticles), useAppSelector(needsUpdate)]; // (3) get articles from the state
 
 	useEffect(() => {
 		data && dispatch(setArticles(data.articles)); // (2) write articles in the state
+		updateNeeded && window.location.reload();
 	}, [page]);
 
 	async function voteClick(e: React.MouseEvent, slug: string, favorited: boolean) {

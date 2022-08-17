@@ -38,10 +38,6 @@ export default function ArticleFull({ user }: { user: Pick<User, 'username' | 'i
 		data && dispatch(setArticles([data.article]));
 	}, [error]);
 
-	/* useEffect(() => {
-		if (id.length > 256) dispatch(forceError('URI is too long (status 414)'));
-	}, []); */
-
 	async function voteClick(e: React.MouseEvent, slug: string, favorited: boolean) {
 		if (!user) return;
 		let response;
@@ -77,6 +73,7 @@ export default function ArticleFull({ user }: { user: Pick<User, 'username' | 'i
 				deleteArticle(id);
 				close();
 				redirectTo('/', { replace: true });
+				window.location.reload();
 			}
 		});
 	};

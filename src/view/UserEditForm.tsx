@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import { Alert } from 'antd';
 
 import FormCreator from '../components/FormCreator';
-import { useUpdateMutation } from '../blogAPI';
-import { UserEditProps } from '../_types';
+import { useGetQuery, useUpdateMutation } from '../blogAPI';
+import { UserEditProps, ErrorResponse } from '../_types';
 import { useAppDispatch, useAppSelector } from '../_hooks';
 import { isValidHttpURL } from '../_utils';
 import { setCredentials, setAuthError, isAuthError, isAuthSuccess, setAuthSuccess } from '../features/authSlice';
@@ -15,6 +15,7 @@ import css from './FormSmallWnd.module.scss';
 export default function SignInForm(): JSX.Element {
 	const dispatch = useAppDispatch();
 	const [isError, isSuccess] = [useAppSelector(isAuthError), useAppSelector(isAuthSuccess)];
+	const { data } = useGetQuery();
 
 	const [update] = useUpdateMutation();
 	const submitData = async (data: UserEditProps) => {
@@ -22,15 +23,23 @@ export default function SignInForm(): JSX.Element {
 			const user = await update(data).unwrap();
 			if ('user' in user)
 				dispatch(setCredentials(user));
-			if ('errors' in user)
+			if ('errors' in user) {
+				console.log('[UPDATE ERROR]', user.errors);
+				serverValidate(user);
 				throw new Error(Object.entries(user.errors)[0].join(' '));
-			//console.log('[UPDATE]', user);
+			}
+			console.log('[UPDATE]', user);
 			dispatch(setAuthSuccess('Profile has been updated.'));
 		} catch(e) {
 			const err = e as SerializedError;
 			dispatch(setAuthError({ name: err.name, message: err.message }));
-			//console.log('[UPDATE ERROR]', err);
 		}
+	};
+
+	const [serverErrors, setServerErrors] = useState<string[]>([]);
+	const serverValidate = ({ errors }: ErrorResponse): void => {
+		setServerErrors(Object.keys(errors));
+		setTimeout(() => console.warn(errors, serverErrors), 200);
 	};
 
 	useEffect(() => {
@@ -57,15 +66,21 @@ export default function SignInForm(): JSX.Element {
 	return (
 		<>
 			{isError && alert || null}
-			{isSuccess && success || null}
+			{isSuccess && !isError && success || null}
 			<FormCreator
 				caption='Edit Profile'
 				action='Save'
 				inputs={[
-					{ name: 'username', label: 'User name', options: { minLength: 3, maxLength: 20 } },
-					{ type: 'email', name: 'email', label: 'Email address' },
+					{ name: 'username', label: 'User name', value: data && data.user.username, options: {
+						minLength: 3, maxLength: 20, validate: {
+							checkServerError: () => {
+								return serverErrors.includes('username') && 'Username is invalid' || true;
+							}
+						}
+					}, onChange: () => setServerErrors([]) },
+					{ type: 'email', name: 'email', label: 'Email address', value: data && data.user.email },
 					{ name: 'password', label: 'New password', options: { minLength: 6, maxLength: 40 } },
-					{ name: 'avatar_url', label: 'Avatar (URL)', options: {
+					{ name: 'avatar_url', label: 'Avatar (URL)', value: data && data.user.image, options: {
 						// validate: { anyDescriptor: (value) => string | true }; string is any message shown for failed validation
 						validate: { checkURL: (value) => !isValidHttpURL(value) && 'Avatar path must be correct URL.' || true }
 					} }
@@ -75,6 +90,7 @@ export default function SignInForm(): JSX.Element {
 					submitData({ user: { username, email, password, image } });
 				}}
 				styles={css}
+				isFormValid={!serverErrors.length}
 			/>
 		</>
 	);

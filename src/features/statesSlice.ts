@@ -49,7 +49,8 @@ const loadingReducer = createReducer(initialState, (builder) => {
 		(action) => {
 			return action.type.endsWith('/pending') && ![
 				'favorite',
-				'unfavorite'
+				'unfavorite',
+				'update'
 			].includes(action.meta.arg.endpointName); // exceptions
 		},
 		(state, action) => {

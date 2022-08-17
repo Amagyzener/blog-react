@@ -12,8 +12,7 @@ import type { Article } from '../_types';
 	which takes the type of the 'action.payload' field as its generic argument. */
 interface ArticlesState {
 	data: Array<Article>;
-	/* dataTotal: number;
-	page: number; */
+	needToUpdate: boolean;
 }
 
 // a type predicate
@@ -43,7 +42,8 @@ interface ArticlesState {
 const articlesSlice = createSlice({
 	name: 'articles',
 	initialState: {
-		data: []
+		data: [],
+		needToUpdate: false
 	} as ArticlesState,
 	reducers: {
 		setPage: (_, action: PayloadAction<number>) => {
@@ -53,10 +53,14 @@ const articlesSlice = createSlice({
 		},
 		setArticles: (state, action: PayloadAction<Array<Article>>) => {
 			state.data = action.payload;
+			state.needToUpdate = false;
 		},
 		setFavorite: (state, { payload }: PayloadAction<{ article: Article }>) => {
 			const idx = state.data.findIndex((article) => article.slug == payload.article.slug);
-			idx != -1 && (state.data[idx] = payload.article);
+			idx != -1 && (
+				state.data[idx] = payload.article,
+				state.needToUpdate = true
+			);
 		}
 	},
 	/* extraReducers: (builder) => {
@@ -76,5 +80,6 @@ const articlesSlice = createSlice({
 export const { setPage, setArticles, setFavorite } = articlesSlice.actions;
 // other code such as selectors can use the imported 'RootState' type
 export const getArticles = (state: RootState) => state.articles.data;
-export const getPage = (/* state: RootState */) => Number(window.sessionStorage.getItem('page')) || 1; /* || state.articles.page */
+export const getPage = () => Number(window.sessionStorage.getItem('page')) || 1;
+export const needsUpdate = (state: RootState) => state.articles.needToUpdate;
 export default articlesSlice.reducer;

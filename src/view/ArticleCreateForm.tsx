@@ -30,6 +30,7 @@ export default function ArticleCreateForm(): JSX.Element {
 		}
 		console.log('[CREATE]', response);
 		navigate('/');
+		window.location.reload();
 	};
 
 	const inputs_render: FormItemProps[] = [
