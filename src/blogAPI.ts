@@ -113,7 +113,8 @@ export const blogAPI = createApi({
 				//console.log('page: %i, page size: %i, offset: %i', page, pageSize, offset);
 				return {
 					url: 'articles',
-					params: { limit: pageSize, offset }
+					params: { limit: pageSize, offset },
+					headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' }
 				};
 			}
 		}),

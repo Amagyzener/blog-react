@@ -125,7 +125,7 @@ export default function FormCreator({ styles: css, ...props }: FormCreatorProps)
 							id={name}
 							aria-invalid={errors[name] ? 'true' : 'false'}
 							type={type}
-							onChange={onChange}
+							/* onChange={onChange} */
 						/>
 						{label && <label htmlFor={name}>{label}</label> || null}
 					</div>
@@ -141,7 +141,7 @@ export default function FormCreator({ styles: css, ...props }: FormCreatorProps)
 							aria-invalid={errors[name] ? 'true' : 'false'}
 							placeholder={label}
 							defaultValue={value}
-							onChange={onChange}
+							/* onChange={onChange} */
 						/>
 					</Fragment>
 				) || (type == 'taglist') && (
@@ -153,7 +153,7 @@ export default function FormCreator({ styles: css, ...props }: FormCreatorProps)
 							placeholder='Type a tag and end up with any separator (dot, comma, etc.), and your tag will appear here'
 							disabled={disabled}
 							style={{ width: '100%' }}
-							onChange={onChange}
+							/* onChange={onChange} */
 						/>
 						<Button type='default' danger onClick={() => {
 							const v = getValues(name);
@@ -172,12 +172,13 @@ export default function FormCreator({ styles: css, ...props }: FormCreatorProps)
 							disabled={disabled}
 							placeholder={(isPlaceholderCompatible && label) || undefined}
 							defaultValue={value}
-							onChange={onChange}
+							/* onChange={onChange} */
 						/>
 					</Fragment>
 				),
 				errors[name] && error_render || null
 			];
+			onChange && (input_render[0] && (input_render[0] as any).addEventListener && (input_render[0] as any).addEventListener('change'), onChange);
 
 			return (
 				<div key={name} className={css.input_container}>
